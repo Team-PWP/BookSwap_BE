@@ -1,13 +1,22 @@
 spring:
   application:
     name: Swap_BE
-    datasource:
-      url: jdbc:mysql://${END_POINT}:3306/${DB_NAME}
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
-    jpa:
+  datasource:
+    url: jdbc:mysql://${END_POINT}:3306/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
       hibernate:
-        ddl-auto: update
+        format_sql: true
+      show-sql: true
 
-
-
+jwt:
+  secret: ${SECRET}
+kakao:
+  client-id: ${CLIENT_ID}
+  redirect-uri: ${REDIRECT_URI}
+  token-uri: ${TOKEN_URI}
+  user-info-uri: ${USER_INFO_URI}
