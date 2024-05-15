@@ -44,8 +44,8 @@ jobs:
           echo "SECRET : ${{ secrets.JWT_SECRET }}"
           sed -i 's/${CLIENT_ID}/'"${{ secrets.CLIENT_ID }}"'/g' src/main/resources/application.yml
           echo "CLIENT_ID : ${{ secrets.CLIENT_ID }}"
-          sed -i 's/${REDIRECT_URI}/'"${{ secrets.REDIRECT_URI }}"'/g' src/main/resources/application.yml
           echo "REDIRECT_URI : ${{ secrets.REDIRECT_URI }}"
+          sed -i 's/${REDIRECT_URI}/'"${{ secrets.REDIRECT_URI }}"'/g' src/main/resources/application.yml
           sed -i 's/${TOKEN_URI}/'"${{ secrets.TOKEN_URI }}"'/g' src/main/resources/application.yml
           echo "TOKEN_URI : ${{ secrets.TOKEN_URI }}"
           sed -i 's/${USER_INFO_URI}/'"${{ secrets.USER_INFO_URI }}"'/g' src/main/resources/application.yml
