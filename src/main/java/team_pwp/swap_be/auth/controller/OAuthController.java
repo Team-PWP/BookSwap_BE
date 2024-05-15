@@ -14,7 +14,7 @@ import team_pwp.swap_be.auth.service.OAuthService;
 import team_pwp.swap_be.auth.service.SecurityService;
 import team_pwp.swap_be.domain.user.UserCreate;
 import team_pwp.swap_be.entity.User;
-import team_pwp.swap_be.service.UserService;
+import team_pwp.swap_be.service.user.UserService;
 
 @RestController
 @RequiredArgsConstructor
