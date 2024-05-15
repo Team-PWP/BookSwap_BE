@@ -35,7 +35,14 @@ jobs:
           sed -i 's/${DB_NAME}/'"${{ secrets.DB_NAME }}"'/g' src/main/resources/application.yml
           sed -i 's/${DB_USERNAME}/'"${{ secrets.DB_USERNAME }}"'/g' src/main/resources/application.yml
           sed -i 's/${DB_PASSWORD}/'"${{ secrets.DB_PASSWORD }}"'/g' src/main/resources/application.yml
-                
+          sed -i 's/${SECRET}/'"${{ secrets.JWT_SECRET }}"'/g' src/main/resources/application.yml
+          sed -i 's/${CLIENT_ID}/'"${{ secrets.CLIENT_ID }}"'/g' src/main/resources/application.yml
+          sed -i 's/${REDIRECT_URI}/'"${{ secrets.REDIRECT_URI }}"'/g' src/main/resources/application.yml
+          sed -i 's/${TOKEN_URI}/'"${{ secrets.TOKEN_URI }}"'/g' src/main/resources/application.yml
+          sed -i 's/${USER_INFO_URI}/'"${{ secrets.USER_INFO_URI }}"'/g' src/main/resources/application.yml
+      
+      
+      
       
       
       # 빌드 실행
