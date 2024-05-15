@@ -1,1 +1,13 @@
-spring.application.name=Swap_BE
+spring:
+  application:
+    name: Swap_BE
+    datasource:
+      url: jdbc:mysql://${END_POINT}:3306/${DB_NAME}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
+    jpa:
+      hibernate:
+        ddl-auto: update
+
+
+
