@@ -1,4 +1,4 @@
-package team_pwp.swap_be.service;
+package team_pwp.swap_be.service.user;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -7,18 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import team_pwp.swap_be.domain.user.UserCreate;
+import team_pwp.swap_be.dto.user.response.UserInfoResponse;
 import team_pwp.swap_be.entity.User;
 import team_pwp.swap_be.repository.UserJpaRepository;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserJpaRepository userJpaRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Transactional
+
     public Optional<User> SignIn(UserCreate userInfo) {
         //email로 회원가입이 되어있는지 확인
         Optional<User> user = userJpaRepository.findByEmail(userInfo.getEmail());
@@ -30,5 +32,18 @@ public class UserService {
             return userJpaRepository.findByEmail(userInfo.getEmail());
         }
         return user;
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfoResponse getUserInfo(long userId) {
+        return UserInfoResponse.from(userJpaRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("유저 정보 조회 실패")));
+    }
+
+    public UserInfoResponse modifyNickname(long userId) {
+        User user = userJpaRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("유저 정보 조회 실패"));
+        user.modifyNickname();
+        return UserInfoResponse.from(user);
     }
 }

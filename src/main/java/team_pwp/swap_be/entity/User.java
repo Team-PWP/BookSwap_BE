@@ -48,4 +48,8 @@ public class User {
             .nickname(userCreate.getNickName())
             .build();
     }
+
+    public void modifyNickname() {
+        this.nickname = this.userName;
+    }
 }
