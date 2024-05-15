@@ -32,14 +32,24 @@ jobs:
       - name: Replace environment variables in application.yml
         run: |
           sed -i 's/${END_POINT}/'"${{ secrets.END_POINT }}"'/g' src/main/resources/application.yml
+          echo "END_POINT: ${{ secrets.END_POINT }}"
           sed -i 's/${DB_NAME}/'"${{ secrets.DB_NAME }}"'/g' src/main/resources/application.yml
+          echo "DB_NAME: ${{ secrets.DB_NAME }}"
           sed -i 's/${DB_USERNAME}/'"${{ secrets.DB_USERNAME }}"'/g' src/main/resources/application.yml
+          echo "DB_USERNAME: ${{ secrets.DB_USERNAME }}"
           sed -i 's/${DB_PASSWORD}/'"${{ secrets.DB_PASSWORD }}"'/g' src/main/resources/application.yml
+          echo "DB_PASSWORD: ${{ secrets.DB_PASSWORD }}"
+          
           sed -i 's/${SECRET}/'"${{ secrets.JWT_SECRET }}"'/g' src/main/resources/application.yml
+          echo "SECRET : ${{ secrets.JWT_SECRET }}"
           sed -i 's/${CLIENT_ID}/'"${{ secrets.CLIENT_ID }}"'/g' src/main/resources/application.yml
+          echo "CLIENT_ID : ${{ secrets.CLIENT_ID }}"
           sed -i 's/${REDIRECT_URI}/'"${{ secrets.REDIRECT_URI }}"'/g' src/main/resources/application.yml
+          echo "REDIRECT_URI : ${{ secrets.REDIRECT_URI }}"
           sed -i 's/${TOKEN_URI}/'"${{ secrets.TOKEN_URI }}"'/g' src/main/resources/application.yml
+          echo "TOKEN_URI : ${{ secrets.TOKEN_URI }}"
           sed -i 's/${USER_INFO_URI}/'"${{ secrets.USER_INFO_URI }}"'/g' src/main/resources/application.yml
+          echo "USER_INFO_URI : ${{ secrets.USER_INFO_URI }}"
       
       
       
