@@ -10,7 +10,7 @@ import team_pwp.swap_be.domain.user.UserCreate;
 import team_pwp.swap_be.domain.user.UserUpdate;
 import team_pwp.swap_be.dto.user.response.UserInfoResponse;
 import team_pwp.swap_be.entity.user.User;
-import team_pwp.swap_be.repository.UserJpaRepository;
+import team_pwp.swap_be.repository.user.UserJpaRepository;
 
 @Service
 @Slf4j

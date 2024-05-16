@@ -1,4 +1,4 @@
-package team_pwp.swap_be.repository;
+package team_pwp.swap_be.repository.user;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
