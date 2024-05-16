@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import team_pwp.swap_be.dto.user.request.UserUpdateRequest;
 import team_pwp.swap_be.dto.user.response.UserInfoResponse;
 import team_pwp.swap_be.service.user.UserService;
 
@@ -30,10 +31,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserInfo(Long.parseLong(principal.getName())));
     }
 
-//    @Operation(summary = "유저 닉네임 수정", description = "유저 닉네임 수정")
-//    @PutMapping("api/user/nickname")
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<UserInfoResponse> updateNickname(@RequestBody Principal principal) {
-//        return ResponseEntity.ok(userService.modifyNickname(Long.parseLong(principal.getName()));
-//    }
+    @Operation(summary = "유저 닉네임 수정", description = "유저 닉네임 수정")
+    @PutMapping("api/user")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserInfoResponse> updateNickname(
+        @RequestBody UserUpdateRequest userUpdateRequest, Principal principal) {
+        return ResponseEntity.ok(userService.modifyNickname(Long.parseLong(principal.getName()),
+            userUpdateRequest.toCommand()));
+    }
 }
