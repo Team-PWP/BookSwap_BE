@@ -16,6 +16,7 @@ import jdk.jfr.Name;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team_pwp.swap_be.domain.article.ArticleCreate;
 import team_pwp.swap_be.entity.user.User;
 
 @Getter
@@ -64,4 +65,18 @@ public class Article {
         this.bidStartAt = bidStartAt;
         this.bidEndAt = bidEndAt;
     }
+
+    public static Article createArticle(ArticleCreate articleCreate, User user) {
+        return Article.builder()
+            .user(user)
+            .title(articleCreate.getTitle())
+            .content(articleCreate.getContent())
+            .buyoutPrice(articleCreate.getBuyoutPrice())
+            .minPrice(articleCreate.getMinPrice())
+            .createdAt(articleCreate.getCreatedAt())
+            .bidStartAt(articleCreate.getBidStartAt())
+            .bidEndAt(articleCreate.getBidEndAt())
+            .build();
+    }
+
 }
