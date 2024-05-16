@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import team_pwp.swap_be.domain.user.UserCreate;
 import team_pwp.swap_be.domain.user.UserUpdate;
-import team_pwp.swap_be.dto.user.request.UserUpdateRequest;
 import team_pwp.swap_be.dto.user.response.UserInfoResponse;
-import team_pwp.swap_be.entity.User;
+import team_pwp.swap_be.entity.user.User;
 import team_pwp.swap_be.repository.UserJpaRepository;
 
 @Service

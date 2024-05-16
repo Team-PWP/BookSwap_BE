@@ -1,7 +1,7 @@
 package team_pwp.swap_be.dto.user.response;
 
 import lombok.Builder;
-import team_pwp.swap_be.entity.User;
+import team_pwp.swap_be.entity.user.User;
 
 @Builder
 public record UserInfoResponse(
