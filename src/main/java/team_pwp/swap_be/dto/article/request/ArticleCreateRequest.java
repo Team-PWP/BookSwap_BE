@@ -56,6 +56,7 @@ public record ArticleCreateRequest(
             .minPrice(minPrice)
             .bidStartAt(bidStartAt)
             .bidEndAt(bidEndAt)
+            .createdAt(LocalDateTime.now())
             .build();
     }
 

@@ -4,9 +4,11 @@ import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_pwp.swap_be.domain.article.ArticleCreate;
+import team_pwp.swap_be.dto.article.response.ArticleResponse;
 import team_pwp.swap_be.entity.article.Article;
 import team_pwp.swap_be.entity.image.Image;
 import team_pwp.swap_be.entity.user.User;
@@ -52,4 +54,20 @@ public class ArticleService {
         return article.getId();
     }
 
+    /**
+     * 게시글 상세 조회
+     *
+     * @param articleId
+     * @return ArticleResponse
+     */
+    public ArticleResponse getArticleInfo(Long articleId) {
+        Article article = articleJpaRepository.findById(articleId)
+            .orElseThrow(() -> new IllegalArgumentException("게시글 정보 조회 실패"));
+        log.info("!!");
+        List<Image> images = ImageJpaRepository.findByArticle(article);
+        log.info(images.toString());
+        log.info(ArticleResponse.from(article, images).toString());
+        return ArticleResponse.from(article, images);
+
+    }
 }

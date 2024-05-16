@@ -25,18 +25,18 @@ public class Image {
     private Article article;
 
     @NotNull
-    private String url;
+    private String imageUrl;
 
     @Builder
-    private Image(Article article, String url) {
+    private Image(Article article, String imageUrl) {
         this.article = article;
-        this.url = url;
+        this.imageUrl = imageUrl;
     }
 
-    public static Image createImage(Article article, String url) {
+    public static Image createImage(Article article, String imageUrl) {
         return Image.builder()
             .article(article)
-            .url(url)
+            .imageUrl(imageUrl)
             .build();
     }
 }
