@@ -1,4 +1,4 @@
-package team_pwp.swap_be.entity;
+package team_pwp.swap_be.entity.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team_pwp.swap_be.domain.user.UserCreate;
 import team_pwp.swap_be.domain.user.UserUpdate;
-import team_pwp.swap_be.dto.user.request.UserUpdateRequest;
 
 @Entity
 @Table(name = "users")
