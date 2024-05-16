@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team_pwp.swap_be.domain.user.UserCreate;
+import team_pwp.swap_be.domain.user.UserUpdate;
+import team_pwp.swap_be.dto.user.request.UserUpdateRequest;
 
 @Entity
 @Table(name = "users")
@@ -49,7 +51,11 @@ public class User {
             .build();
     }
 
-    public void modifyNickname() {
-        this.nickname = this.userName;
+    /**
+     * 유저 정보 수정
+     */
+    public User updateUser(UserUpdate userUpdate) {
+        this.nickname = userUpdate.getNickName();
+        return this;
     }
 }
