@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team_pwp.swap_be.dto.article.request.ArticleCreateRequest;
@@ -81,5 +82,24 @@ public class ArticleController {
     public PagingResponse<ArticleResponse> getArticles(@Valid PagingRequest pagingRequest) {
         log.info("게시글 페이징 조회");
         return articleService.getArticlePaging(pagingRequest);
+    }
+
+    @Operation(summary = "유저 작성 게시글 페이징 조회", description = "쿼리 파라미터 확인 부탁드립니다! ex) page=0&size=10&userId=유저아이디")
+    @GetMapping("/user/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public PagingResponse<ArticleResponse> getUserArticles(@Valid PagingRequest pagingRequest,
+        @PathVariable Long userId) {
+        log.info("유저 작성 게시글 페이징 조회");
+        return articleService.getUserArticlePaging(pagingRequest,
+            userId);
+    }
+
+    @Operation(summary = "게시글 이름 검색 페이징", description = "쿼리 파라미터 확인 부탁드립니다! ex) page=0&size=10&keyword=검색어")
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public PagingResponse<ArticleResponse> searchArticles(@Valid PagingRequest pagingRequest,
+        @RequestParam String keyword) {
+        log.info("게시글 이름 검색 페이징 조회");
+        return articleService.searchArticlePaging(keyword, pagingRequest);
     }
 }
