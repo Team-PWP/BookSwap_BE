@@ -127,5 +127,34 @@ public class ArticleService {
         images.forEach(imageJpaRepository::delete);
         articleJpaRepository.delete(article);
     }
+
+    /**
+     * 유저 작성 게시글 페이징 조회
+     *
+     * @param pagingRequest
+     * @param userId
+     * @return PagingResponse<ArticleResponse>
+     */
+    @Transactional(readOnly = true)
+    public PagingResponse<ArticleResponse> getUserArticlePaging(PagingRequest pagingRequest,
+        Long userId) {
+        Page<ArticleImage> articleImages = articleJpaRepository.findAllByUserId(userId,
+            pagingRequest.toPageable());
+        return PagingResponse.from(articleImages, ArticleResponse::from);
+    }
+
+    /**
+     * 게시글 검색
+     *
+     * @param keyword
+     * @param pagingRequest
+     */
+    public PagingResponse<ArticleResponse> searchArticlePaging(String keyword,
+        PagingRequest pagingRequest) {
+        log.info(keyword);
+        Page<ArticleImage> articleImages = articleJpaRepository.findByTitleContain(keyword,
+            pagingRequest.toPageable());
+        return PagingResponse.from(articleImages, ArticleResponse::from);
+    }
 }
 
