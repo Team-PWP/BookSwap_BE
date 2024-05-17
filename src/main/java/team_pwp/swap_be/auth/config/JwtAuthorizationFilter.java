@@ -32,10 +32,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws IOException, ServletException {
         log.info("dofilterinternal 실행");
 
+        /**
+         * 인증이 필요없는 요청은 필터를 타지 않고 바로 다음 필터로 넘어간다.
+         */
         if (request.getRequestURI().startsWith("/oauth2") || request.getRequestURI()
             .startsWith("/refresh") || request.getRequestURI().startsWith("/swagger-ui")
             || request.getRequestURI().startsWith("/api-docs") || request.getRequestURI()
-            .startsWith("/v3")) {
+            .startsWith("/v3") || ("GET".equals(request.getMethod()) && request.getRequestURI()
+            .startsWith("/api/article"))) {
             log.info("다음필터 실행");
 
             filterChain.doFilter(request, response);
@@ -57,7 +61,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throw new IllegalArgumentException("예상치 못한 토큰 오류");
         }
 
-        log.info("다음필터 실행");
         // 다음 Filter를 실행하기 위한 코드. 마지막 필터라면 필터 실행 후 리소스를 반환한다.
         filterChain.doFilter(request, response);
     }

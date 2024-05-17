@@ -3,37 +3,32 @@ package team_pwp.swap_be.dto.article.response;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
-import lombok.Getter;
+import team_pwp.swap_be.domain.article.ArticleImage;
 import team_pwp.swap_be.entity.article.Article;
 import team_pwp.swap_be.entity.image.Image;
 
-
 @Builder
 public record ArticleResponse(
-    Long userId,
     String title,
-    String content,
     Long buyoutPrice,
     Long minPrice,
     LocalDateTime createdAt,
     LocalDateTime bidStartAt,
     LocalDateTime bidEndAt,
-    List<String> imageUrls
+    List<String> imageUrl
 ) {
 
-    public static ArticleResponse from(Article article, List<Image> images) {
+    public static ArticleResponse from(ArticleImage articleImage) {
         return ArticleResponse.builder()
-            .userId(article.getUser().getId())
-            .title(article.getTitle())
-            .content(article.getContent())
-            .buyoutPrice(article.getBuyoutPrice())
-            .minPrice(article.getMinPrice())
-            .createdAt(article.getCreatedAt())
-            .bidStartAt(article.getBidStartAt())
-            .bidEndAt(article.getBidEndAt())
-            .imageUrls(images.stream().map(Image::getImageUrl).toList())
+            .title(articleImage.getTitle())
+            .buyoutPrice(articleImage.getBuyoutPrice())
+            .minPrice(articleImage.getMinPrice())
+            .createdAt(articleImage.getCreatedAt())
+            .bidStartAt(articleImage.getBidStartAt())
+            .bidEndAt(articleImage.getBidEndAt())
+            .imageUrl(articleImage.getImageUrls())
             .build();
-    }
 
+    }
 
 }

@@ -79,4 +79,16 @@ public class Article {
             .build();
     }
 
+    /**
+     * ArticleUpdate 비즈니스 메서스
+     */
+    public void updateArticle(ArticleCreate articleCreate) {
+        this.title = articleCreate.getTitle();
+        this.content = articleCreate.getContent();
+        this.buyoutPrice = articleCreate.getBuyoutPrice();
+        this.minPrice = articleCreate.getMinPrice();
+        this.bidStartAt = articleCreate.getBidStartAt();
+        this.bidEndAt = articleCreate.getBidEndAt();
+    }
+
 }
