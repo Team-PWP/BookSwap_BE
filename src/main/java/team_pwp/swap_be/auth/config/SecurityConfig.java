@@ -49,7 +49,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authReq -> authReq
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers("/", "/login", "/oauth2/**", "/refresh", "/swagger-ui/**",
-                    "/api-docs", "/v3/api-docs/**", "api/article/**").permitAll()
+                    "/api-docs", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated())
             .exceptionHandling(e -> e
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
