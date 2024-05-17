@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team_pwp.swap_be.dto.article.request.ArticleCreateRequest;
-import team_pwp.swap_be.dto.article.request.ArticleUpdateRequest;
 import team_pwp.swap_be.dto.article.response.ArticleInfoResponse;
 import team_pwp.swap_be.dto.article.response.ArticleResponse;
 import team_pwp.swap_be.dto.common.PagingRequest;
