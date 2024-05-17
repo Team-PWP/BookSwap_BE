@@ -84,7 +84,7 @@ public class ArticleController {
         return articleService.getArticlePaging(pagingRequest);
     }
 
-    @Operation(summary = "유저 작성 게시글 페이징 조회", description = "쿼리 파라미터 확인 부탁드립니다! ex) page=0&size=10&userId=유저아이디")
+    @Operation(summary = "유저 작성 게시글 페이징 조회", description = "쿼리 파라미터 확인 부탁드립니다! ex) user/{유저아이디}?page=0&size=10")
     @GetMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public PagingResponse<ArticleResponse> getUserArticles(@Valid PagingRequest pagingRequest,
