@@ -40,6 +40,20 @@ public record ArticleCreateRequest(
     }
 
     /**
+     * minPrice는 0이상 입니다.
+     */
+    public boolean isMinPriceValid() {
+        return minPrice >= 0;
+    }
+
+    /**
+     * buyoutPrice는 minPrice보다 커야합니다.
+     */
+    public boolean isBuyoutPriceValid() {
+        return buyoutPrice > minPrice;
+    }
+
+    /**
      * ArticleCreateRequest를 ArticleCreate로 변환합니다. 위 두 메서드의 결과가 true일 때만 변환합니다.
      *
      * @return
@@ -49,6 +63,13 @@ public record ArticleCreateRequest(
             throw new IllegalArgumentException(
                 "입찰 시작일과 종료일을 확인해주세요. 입찰 시작일은 현재시각 이후여야하며, 입찰 종료일은 입찰 시작일 이후 최소 1시간 이후여야 합니다.");
         }
+        if (!isMinPriceValid()) {
+            throw new IllegalArgumentException("최소 입찰가격은 0 이상이어야 합니다.");
+        }
+        if (!isBuyoutPriceValid()) {
+            throw new IllegalArgumentException("즉시 구매가격은 최소 입찰가격보다 커야합니다.");
+        }
+        
         return ArticleCreate.builder()
             .title(title)
             .content(content)
