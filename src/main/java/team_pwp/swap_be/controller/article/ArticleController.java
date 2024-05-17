@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team_pwp.swap_be.dto.article.request.ArticleCreateRequest;
 import team_pwp.swap_be.dto.article.request.ArticleUpdateRequest;
+import team_pwp.swap_be.dto.article.response.ArticleInfoResponse;
 import team_pwp.swap_be.dto.article.response.ArticleResponse;
+import team_pwp.swap_be.dto.common.PagingRequest;
+import team_pwp.swap_be.dto.common.PagingResponse;
 import team_pwp.swap_be.service.article.ArticleService;
 
 @Tag(name = "게시글", description = "게시글 API")
@@ -63,16 +66,16 @@ public class ArticleController {
     @Operation(summary = "게시글 상세 조회", description = "게시글 상세 조회")
     @GetMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long articleId) {
+    public ResponseEntity<ArticleInfoResponse> getArticle(@PathVariable Long articleId) {
         log.info("게시글 상세 조회");
         return ResponseEntity.status(HttpStatus.OK).body(articleService.getArticleInfo(articleId));
     }
-//
-//    @Operation(summary = "게시글 페이징 조회", description = "게시글 페이징 조회")
-//    @GetMapping
-//    @ResponseStatus(HttpStatus.OK)
-//    public PagingResponse<ArticleResponse> getArticles(@Valid PagingRequest pagingRequest) {
-//        log.info("게시글 페이징 조회");
-//        return articleService.getArticlePaging(pagingRequest);
-//    }
+
+    @Operation(summary = "게시글 페이징 조회", description = "쿼리 파라미터 확인 부탁드립니다! ex) page=0&size=10")
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public PagingResponse<ArticleResponse> getArticles(@Valid PagingRequest pagingRequest) {
+        log.info("게시글 페이징 조회");
+        return articleService.getArticlePaging(pagingRequest);
+    }
 }
