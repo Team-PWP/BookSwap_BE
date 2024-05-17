@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,23 +47,27 @@ public class ArticleController {
                 articleCreateRequest.imageUrls(), Long.parseLong(principal.getName())));
     }
 
-    //    @Operation(summary = "게시글 수정", description = "게시글 수정")
-//    @PutMapping("/{articleId}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public void modifyArticle(@PathVariable Long articleId,
-//        @Valid @RequestBody ArticleUpdateRequest articleUpdateRequest) {
-//        log.info("게시글 수정");
-//        articleService.updateArticle(articleId, articleUpdateRequest.toDomain());
-//    }
-//
-//    @Operation(summary = "게시글 삭제", description = "게시글 삭제")
-//    @DeleteMapping("/{articleId}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public void deleteArticle(@PathVariable Long articleId) {
-//        log.info("게시글 삭제");
-//        articleService.deleteArticle(articleId);
-//    }
-//
+    @Operation(summary = "게시글 수정", description = "게시글 수정")
+    @PutMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Long> updateArticle(@PathVariable Long articleId,
+        @Valid @RequestBody ArticleCreateRequest articleUpdateRequest, Principal principal) {
+        log.info("게시글 수정");
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(articleService.updateArticle(articleId, articleUpdateRequest.toCommand(),
+                articleUpdateRequest.imageUrls(), Long.parseLong(principal.getName())));
+    }
+
+
+    @Operation(summary = "게시글 삭제", description = "게시글 삭제")
+    @DeleteMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteArticle(@PathVariable Long articleId, Principal principal) {
+        log.info("게시글 삭제");
+        articleService.deleteArticle(articleId, Long.parseLong(principal.getName()));
+        return ResponseEntity.status(HttpStatus.OK).body("게시글 삭제 성공");
+    }
+
     @Operation(summary = "게시글 상세 조회", description = "게시글 상세 조회")
     @GetMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)

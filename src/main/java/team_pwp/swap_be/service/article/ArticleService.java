@@ -63,6 +63,7 @@ public class ArticleService {
      * @param articleId
      * @return ArticleResponse
      */
+    @Transactional(readOnly = true)
     public ArticleInfoResponse getArticleInfo(Long articleId) {
         Article article = articleJpaRepository.findById(articleId)
             .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 게시글이 없습니다."));
@@ -76,10 +77,55 @@ public class ArticleService {
      * @param pagingRequest
      * @return PagingResponse<ArticleResponse>
      */
+    @Transactional(readOnly = true)
     public PagingResponse<ArticleResponse> getArticlePaging(PagingRequest pagingRequest) {
         Page<ArticleImage> articleImages = articleJpaRepository.findAllArticleImage(
             pagingRequest.toPageable());
         return PagingResponse.from(articleImages, ArticleResponse::from);
+    }
+
+    /**
+     * 게시글 수정
+     *
+     * @param articleId
+     * @param articleUpdate
+     */
+    public Long updateArticle(Long articleId, ArticleCreate articleUpdate, List<String> imageUrls,
+        Long userId) {
+        Article article = articleJpaRepository.findById(articleId)
+            .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 게시글이 없습니다."));
+        User user = userJpaRepository.findById(userId).orElseThrow(() ->
+            new IllegalArgumentException("id에 해당하는 유저가 없습니다."));
+        if (!article.getUser().equals(user)) {
+            throw new IllegalArgumentException("게시글 작성자만 수정 가능합니다.");
+        }
+
+        List<Image> images = imageJpaRepository.findByArticle(article);
+        images.forEach(imageJpaRepository::delete);
+        imageUrls.stream()
+            .map(imageUrl -> Image.createImage(article, imageUrl))
+            .forEach(imageJpaRepository::save);
+
+        article.updateArticle(articleUpdate);
+        return article.getId();
+    }
+
+    /**
+     * 게시글 삭제
+     *
+     * @param articleId
+     */
+    public void deleteArticle(Long articleId, Long userId) {
+        Article article = articleJpaRepository.findById(articleId)
+            .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 게시글이 없습니다."));
+
+        if (!article.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("게시글 작성자만 삭제 가능합니다.");
+        }
+
+        List<Image> images = imageJpaRepository.findByArticle(article);
+        images.forEach(imageJpaRepository::delete);
+        articleJpaRepository.delete(article);
     }
 }
 
