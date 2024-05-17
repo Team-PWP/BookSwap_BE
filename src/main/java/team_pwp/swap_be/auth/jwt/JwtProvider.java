@@ -66,7 +66,11 @@ public class JwtProvider {
             String token = authHeader.substring("Bearer ".length());
             return token;
         } else {
-            throw new IllegalArgumentException("AccessToken이 없거나 Bearer type이 아닙니다.");
+            /**
+             * AccessToken이 없거나 Bearer type이 아닐 경우
+             * 에러 response 전달
+             */
+            throw new IllegalArgumentException("토큰이 없거나 Bearer type이 아닙니다.");
         }
     }
 

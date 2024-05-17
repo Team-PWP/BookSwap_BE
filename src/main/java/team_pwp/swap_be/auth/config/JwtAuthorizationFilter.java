@@ -10,6 +10,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import team_pwp.swap_be.auth.jwt.JwtProvider;
+import team_pwp.swap_be.global.error.ErrorResponse;
 
 @Component
 @RequiredArgsConstructor
@@ -46,19 +49,28 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        //authorization header에서 access token을 추출
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String accessToken = jwtProvider.parseAccessToken(authHeader);
+        try {
+            //authorization header에서 access token을 추출
+            String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            String accessToken = jwtProvider.parseAccessToken(authHeader);
+            if (StringUtils.hasText(accessToken) && jwtProvider.validateToken(accessToken)) {
+                // 일단 USER 권한만 부여
+                List<GrantedAuthority> authorities = Collections.singletonList(
+                    new SimpleGrantedAuthority("ROLE_USER"));
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    jwtProvider.getUserIdFromToken(accessToken), null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                throw new IllegalArgumentException("예상치 못한 토큰 오류");
+            }
 
-        if (StringUtils.hasText(accessToken) && jwtProvider.validateToken(accessToken)) {
-            // 일단 USER 권한만 부여
-            List<GrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_USER"));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                jwtProvider.getUserIdFromToken(accessToken), null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
-            throw new IllegalArgumentException("예상치 못한 토큰 오류");
+        } catch (Exception e) {
+            log.error("토큰 오류", e);
+            ResponseEntity<ErrorResponse> responseEntity = ResponseEntity.status(
+                    HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "토큰 오류"));
+            response.getWriter().write(responseEntity.toString());
+            return;
         }
 
         // 다음 Filter를 실행하기 위한 코드. 마지막 필터라면 필터 실행 후 리소스를 반환한다.
