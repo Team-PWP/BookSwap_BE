@@ -16,7 +16,7 @@ public record UserInfoResponse(
             .userId(user.getId())
             .nickname(user.getNickname())
             .email(user.getEmail())
-            .userName(user.getUserName())
+            .userName(user.getUsername())
             .build();
     }
 }

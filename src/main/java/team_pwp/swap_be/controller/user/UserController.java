@@ -2,6 +2,7 @@ package team_pwp.swap_be.controller.user;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class UserController {
     @PutMapping("api/user")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserInfoResponse> updateNickname(
-        @RequestBody UserUpdateRequest userUpdateRequest, Principal principal) {
+        @Valid @RequestBody UserUpdateRequest userUpdateRequest, Principal principal) {
         return ResponseEntity.ok(userService.modifyNickname(Long.parseLong(principal.getName()),
             userUpdateRequest.toCommand()));
     }

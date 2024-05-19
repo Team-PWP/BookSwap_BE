@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class UserUpdate {
 
-    private final String nickName;
-    private final String userName;
+    private final String nickname;
+    private final String username;
 
 }
