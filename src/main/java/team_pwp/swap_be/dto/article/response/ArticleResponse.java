@@ -9,6 +9,8 @@ import team_pwp.swap_be.entity.image.Image;
 
 @Builder
 public record ArticleResponse(
+    Long articleId,
+    String userNickname,
     String title,
     Long buyoutPrice,
     Long minPrice,
@@ -20,6 +22,8 @@ public record ArticleResponse(
 
     public static ArticleResponse from(ArticleImage articleImage) {
         return ArticleResponse.builder()
+            .articleId(articleImage.getId())
+            .userNickname(articleImage.getUserNickname())
             .title(articleImage.getTitle())
             .buyoutPrice(articleImage.getBuyoutPrice())
             .minPrice(articleImage.getMinPrice())

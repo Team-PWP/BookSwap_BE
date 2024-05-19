@@ -15,7 +15,7 @@ public interface ArticleJpaRepository extends JpaRepository<Article, Long> {
     Page<Article> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     @Query("SELECT new team_pwp.swap_be.domain.article.ArticleImage(" +
-        "a.id, a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
+        "a.id,a.user,a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
         +
         "GROUP_CONCAT(i.imageUrl)) " +
         "FROM Article a " +
@@ -32,7 +32,7 @@ public interface ArticleJpaRepository extends JpaRepository<Article, Long> {
      * @return
      */
     @Query("SELECT new team_pwp.swap_be.domain.article.ArticleImage(" +
-        "a.id, a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
+        "a.id,a.user, a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
         +
         "GROUP_CONCAT(i.imageUrl)) " +
         "FROM Article a " +
@@ -49,7 +49,7 @@ public interface ArticleJpaRepository extends JpaRepository<Article, Long> {
      * @return ArticleResponse
      */
     @Query("SELECT new team_pwp.swap_be.domain.article.ArticleImage(" +
-        "a.id, a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
+        "a.id,a.user, a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
         +
         "GROUP_CONCAT(i.imageUrl)) " +
         "FROM Article a " +
