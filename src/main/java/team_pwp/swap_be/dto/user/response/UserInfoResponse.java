@@ -8,7 +8,7 @@ public record UserInfoResponse(
     Long userId,
     String nickname,
     String email,
-    String userName
+    String username
 ) {
 
     public static UserInfoResponse from(User user) {
@@ -16,7 +16,7 @@ public record UserInfoResponse(
             .userId(user.getId())
             .nickname(user.getNickname())
             .email(user.getEmail())
-            .userName(user.getUsername())
+            .username(user.getUsername())
             .build();
     }
 }
