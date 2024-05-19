@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             .startsWith("/refresh") || request.getRequestURI().startsWith("/swagger-ui")
             || request.getRequestURI().startsWith("/api-docs") || request.getRequestURI()
             .startsWith("/v3") || ("GET".equals(request.getMethod()) && request.getRequestURI()
-            .startsWith("/api/article"))) {
+            .startsWith("/api/article")) || request.getRequestURI().startsWith("/chat")) {
             log.info("다음필터 실행");
 
             filterChain.doFilter(request, response);
