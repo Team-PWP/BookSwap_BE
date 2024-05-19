@@ -1,15 +1,16 @@
 package team_pwp.swap_be.dto.chat.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 
 public record ChatRoomCreateRequest(
-    @NotBlank
+    @NotNull
     Long articleId,
-    @NotBlank
+    @NotNull
     Long buyerId,
-    @NotBlank
+    @NotNull
     Long sellerId,
     @NotBlank
     String title

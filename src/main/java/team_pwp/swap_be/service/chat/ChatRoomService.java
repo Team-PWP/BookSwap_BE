@@ -1,10 +1,14 @@
-package team_pwp.swap_be.service.chatroom;
+package team_pwp.swap_be.service.chat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_pwp.swap_be.dto.chat.request.ChatRoomCreateRequest;
+import team_pwp.swap_be.dto.chat.response.EnterChatRoomResponse;
+import team_pwp.swap_be.dto.common.PagingRequest;
+import team_pwp.swap_be.dto.common.PagingResponse;
 import team_pwp.swap_be.entity.article.Article;
 import team_pwp.swap_be.entity.chat.ChatRoom;
 import team_pwp.swap_be.entity.chat.EnterChatRoom;
@@ -52,5 +56,19 @@ public class ChatRoomService {
         enterChatRoomJpaRepository.save(enterChatRoomSeller);
 
         return chatRoom.getId();
+    }
+
+    /**
+     * 유저별 채팅방 조회
+     *
+     * @return
+     */
+    public PagingResponse<EnterChatRoomResponse> getChatRoom(PagingRequest pagingRequest,
+        Long userId) {
+        User user = userJpaRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        Page<EnterChatRoom> enterChatRooms = enterChatRoomJpaRepository.findAllByUserId(
+            userId, pagingRequest.toPageable());
+        return PagingResponse.from(enterChatRooms, EnterChatRoomResponse::from);
     }
 }
