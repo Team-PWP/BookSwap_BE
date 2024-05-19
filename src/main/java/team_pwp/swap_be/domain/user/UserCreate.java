@@ -8,21 +8,21 @@ import lombok.Getter;
 public class UserCreate {
 
     private final String email;
-    private final String userName;
-    private final String nickName;
+    private final String username;
+    private final String nickname;
 
     @Builder
-    private UserCreate(String email, String userName, String nickName) {
+    private UserCreate(String email, String username, String nickname) {
         this.email = email;
-        this.userName = userName;
-        this.nickName = nickName;
+        this.username = username;
+        this.nickname = nickname;
     }
 
     public static UserCreate from(JsonNode jsonNode) {
         return UserCreate.builder()
             .email(jsonNode.get("kakao_account").get("email").asText())
-            .userName(jsonNode.get("properties").get("nickname").asText())
-            .nickName(jsonNode.get("properties").get("nickname").asText())
+            .username(jsonNode.get("properties").get("nickname").asText())
+            .nickname(jsonNode.get("properties").get("nickname").asText())
             .build();
     }
 

@@ -1,22 +1,23 @@
 package team_pwp.swap_be.dto.article.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import team_pwp.swap_be.domain.article.ArticleCreate;
 
 public record ArticleCreateRequest(
-    @NotBlank
+    @NotBlank(message = "제목은 필수입니다.")
     String title,
-    @NotBlank
+    @NotBlank(message = "내용은 필수입니다.")
     String content,
-    @NotBlank
+    @NotNull(message = "즉시 구매가격은 필수입니다.")
     Long buyoutPrice,
-    @NotBlank
+    @NotNull(message = "최소 입찰가격은 필수입니다.")
     Long minPrice,
-    @NotBlank
+    @NotNull(message = "입찰 시작일은 필수입니다.")
     LocalDateTime bidStartAt,
-    @NotBlank
+    @NotNull(message = "입찰 종료일은 필수입니다.")
     LocalDateTime bidEndAt,
     List<String> imageUrls
 ) {
@@ -69,7 +70,7 @@ public record ArticleCreateRequest(
         if (!isBuyoutPriceValid()) {
             throw new IllegalArgumentException("즉시 구매가격은 최소 입찰가격보다 커야합니다.");
         }
-        
+
         return ArticleCreate.builder()
             .title(title)
             .content(content)

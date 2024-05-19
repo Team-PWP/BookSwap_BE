@@ -16,6 +16,8 @@ import jdk.jfr.Name;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import team_pwp.swap_be.domain.article.ArticleCreate;
 import team_pwp.swap_be.entity.user.User;
 
@@ -29,6 +31,7 @@ public class Article {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
     private User user;
 

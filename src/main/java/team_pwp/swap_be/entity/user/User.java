@@ -27,7 +27,7 @@ public class User {
     private String email;
 
     @Column(unique = true)
-    private String userName;
+    private String username;
 
     /**
      * default = userName
@@ -36,17 +36,17 @@ public class User {
     private String nickname;
 
     @Builder
-    private User(String email, String userName, String nickname) {
+    private User(String email, String username, String nickname) {
         this.email = email;
-        this.userName = userName;
+        this.username = username;
         this.nickname = nickname;
     }
 
     public static User createUser(UserCreate userCreate) {
         return User.builder()
             .email(userCreate.getEmail())
-            .userName(userCreate.getUserName())
-            .nickname(userCreate.getNickName())
+            .username(userCreate.getUsername())
+            .nickname(userCreate.getNickname())
             .build();
     }
 
@@ -54,7 +54,7 @@ public class User {
      * 유저 정보 수정
      */
     public User updateUser(UserUpdate userUpdate) {
-        this.nickname = userUpdate.getNickName();
+        this.nickname = userUpdate.getNickname();
         return this;
     }
 }
