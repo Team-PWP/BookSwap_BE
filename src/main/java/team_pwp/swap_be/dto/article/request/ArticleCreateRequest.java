@@ -11,13 +11,13 @@ public record ArticleCreateRequest(
     String title,
     @NotBlank(message = "내용은 필수입니다.")
     String content,
-    @NotBlank(message = "즉시 구매가격은 필수입니다.")
+    @NotNull(message = "즉시 구매가격은 필수입니다.")
     Long buyoutPrice,
-    @NotBlank(message = "최소 입찰가격은 필수입니다.")
+    @NotNull(message = "최소 입찰가격은 필수입니다.")
     Long minPrice,
-    @NotBlank(message = "입찰 시작일은 필수입니다.")
+    @NotNull(message = "입찰 시작일은 필수입니다.")
     LocalDateTime bidStartAt,
-    @NotBlank(message = "입찰 종료일은 필수입니다.")
+    @NotNull(message = "입찰 종료일은 필수입니다.")
     LocalDateTime bidEndAt,
     List<String> imageUrls
 ) {
