@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import team_pwp.swap_be.entity.user.User;
 
 @Getter
 public class ArticleImage {
 
     private final Long id;
+    private final String userNickname;
     private final String title;
     private final String content;
     private final Long buyoutPrice;
@@ -21,10 +23,12 @@ public class ArticleImage {
     private final List<String> imageUrls;
 
     // 생성자
-    public ArticleImage(Long id, String title, String content, Long buyoutPrice, Long minPrice,
+    public ArticleImage(Long id, User user, String title, String content, Long buyoutPrice,
+        Long minPrice,
         LocalDateTime createdAt, LocalDateTime bidStartAt, LocalDateTime bidEndAt,
         Object imageUrls) {
         this.id = id;
+        this.userNickname = user.getNickname();
         this.title = title;
         this.content = content;
         this.buyoutPrice = buyoutPrice;
