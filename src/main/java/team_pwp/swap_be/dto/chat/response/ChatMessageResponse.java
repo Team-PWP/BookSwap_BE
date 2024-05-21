@@ -11,6 +11,7 @@ public class ChatMessageResponse {
 
     String message;
     Long userId;
+    String nickname;
     LocalDateTime createdAt;
 
     public static ChatMessageResponse from(ChatMessage chatMessage) {
@@ -18,6 +19,7 @@ public class ChatMessageResponse {
             .message(chatMessage.getMessage())
             .userId(chatMessage.getUser().getId())
             .createdAt(chatMessage.getCreatedAt())
+            .nickname(chatMessage.getUser().getNickname())
             .build();
     }
 
