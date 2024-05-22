@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 import team_pwp.swap_be.domain.article.ArticleCreate;
 
 public record ArticleCreateRequest(
@@ -18,8 +19,7 @@ public record ArticleCreateRequest(
     @NotNull(message = "입찰 시작일은 필수입니다.")
     LocalDateTime bidStartAt,
     @NotNull(message = "입찰 종료일은 필수입니다.")
-    LocalDateTime bidEndAt,
-    List<String> imageUrls
+    LocalDateTime bidEndAt
 ) {
 
     /**

@@ -32,19 +32,17 @@ jobs:
       - name: Replace environment variables in application.yml
         run: |
           sed -i 's/${END_POINT}/'"${{ secrets.END_POINT }}"'/g' src/main/resources/application.yml
-          echo "END_POINT: ${{ secrets.END_POINT }}"
           sed -i 's/${DB_NAME}/'"${{ secrets.DB_NAME }}"'/g' src/main/resources/application.yml
-          echo "DB_NAME: ${{ secrets.DB_NAME }}"
           sed -i 's/${DB_USERNAME}/'"${{ secrets.DB_USERNAME }}"'/g' src/main/resources/application.yml
-          echo "DB_USERNAME: ${{ secrets.DB_USERNAME }}"
           sed -i 's/${DB_PASSWORD}/'"${{ secrets.DB_PASSWORD }}"'/g' src/main/resources/application.yml
-          echo "DB_PASSWORD: ${{ secrets.DB_PASSWORD }}"
           
           sed -i 's/${SECRET}/'"${{ secrets.JWT_SECRET }}"'/g' src/main/resources/application.yml
-          echo "SECRET : ${{ secrets.JWT_SECRET }}"
           sed -i 's/${CLIENT_ID}/'"${{ secrets.CLIENT_ID }}"'/g' src/main/resources/application.yml
-          echo "CLIENT_ID : ${{ secrets.CLIENT_ID }}"
-                
+          
+          sed -i 's/${BUCKET_NAME}/'"${{ secrets.BUCKET_NAME }}"'/g' src/main/resources/application.yml
+          sed -i 's/${S3_ACCESS_KEY}/'"${{ secrets.S3_ACCESS_KEY }}"'/g' src/main/resources/application.yml
+          sed -i 's/${S3_SECRET_KEY}/'"${{ secrets.S3_SECRET_KEY }}"'/g' src/main/resources/application.yml
+      
       
       
       

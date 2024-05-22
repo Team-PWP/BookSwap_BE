@@ -1,12 +1,18 @@
 package team_pwp.swap_be.controller.article;
 
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +23,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import team_pwp.swap_be.dto.article.request.ArticleCreateRequest;
 import team_pwp.swap_be.dto.article.response.ArticleInfoResponse;
 import team_pwp.swap_be.dto.article.response.ArticleResponse;
@@ -34,28 +42,34 @@ import team_pwp.swap_be.service.article.ArticleService;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final AmazonS3 amazonS3;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     @Operation(summary = "게시글 생성", description = "게시글 생성")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Long> createArticle(
-        @Valid @RequestBody ArticleCreateRequest articleCreateRequest,
+        @Valid @RequestPart("article") ArticleCreateRequest articleCreateRequest,
+        @RequestPart("images") List<MultipartFile> images,
         Principal principal) {
         log.info("게시글 생성");
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(articleService.createArticle(articleCreateRequest.toCommand(),
-                articleCreateRequest.imageUrls(), Long.parseLong(principal.getName())));
+                images, Long.parseLong(principal.getName())));
     }
 
     @Operation(summary = "게시글 수정", description = "게시글 수정")
     @PutMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Long> updateArticle(@PathVariable Long articleId,
-        @Valid @RequestBody ArticleCreateRequest articleUpdateRequest, Principal principal) {
+        @Valid @RequestPart("article") ArticleCreateRequest articleUpdateRequest,
+        @RequestPart("images") List<MultipartFile> images, Principal principal) {
         log.info("게시글 수정");
         return ResponseEntity.status(HttpStatus.OK)
             .body(articleService.updateArticle(articleId, articleUpdateRequest.toCommand(),
-                articleUpdateRequest.imageUrls(), Long.parseLong(principal.getName())));
+                images, Long.parseLong(principal.getName())));
     }
 
 
@@ -101,5 +115,24 @@ public class ArticleController {
         @RequestParam String keyword) {
         log.info("게시글 이름 검색 페이징 조회");
         return articleService.searchArticlePaging(keyword, pagingRequest);
+    }
+
+    @Operation(summary = "업로드 테스트", description = "업로드 테스트")
+    @PostMapping("/upload")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<String> uploadTest(@RequestParam("file") MultipartFile file) {
+        log.info("업로드 테스트");
+        try {
+            String fileName = file.getOriginalFilename();
+            String fileUrl = "https://" + bucket + "/test" + fileName;
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+            amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
+            return ResponseEntity.ok(fileUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
