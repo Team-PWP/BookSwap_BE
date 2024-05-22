@@ -1,11 +1,17 @@
 package team_pwp.swap_be.service.article;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import team_pwp.swap_be.domain.article.ArticleCreate;
 import team_pwp.swap_be.domain.article.ArticleImage;
 import team_pwp.swap_be.dto.article.response.ArticleInfoResponse;
@@ -28,16 +34,16 @@ public class ArticleService {
     private final UserJpaRepository userJpaRepository;
     private final ArticleJpaRepository articleJpaRepository;
     private final ImageJpaRepository imageJpaRepository;
+    private final AmazonS3 amazonS3;
+    private final S3Service s3Service;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     /**
      * 게시글 생성 및 imageUrl 저장
-     *
-     * @param articleCreateRequest
-     * @param imageUrls
-     * @param userId
-     * @return 게시글 id
      */
-    public Long createArticle(ArticleCreate articleCreateRequest, List<String> imageUrls,
+    public Long createArticle(ArticleCreate articleCreateRequest, List<MultipartFile> imageFiles,
         Long userId) {
         /**
          * 게시글 생성
@@ -47,15 +53,41 @@ public class ArticleService {
             .orElseThrow(() -> new IllegalArgumentException("유저 정보 조회 실패"));
         Article article = Article.createArticle(articleCreateRequest, user);
         articleJpaRepository.save(article);
+
+        log.info("이미지 파일 개수 size:{}", imageFiles.size());
         /**
-         * stream을 사용하여 createImage로 imageUrl 저장
+         * 이미지 파일이 있는 경우 업로드하고 URL을 리스트로 생성
          */
-        imageUrls.stream()
-            .map(imageUrl -> Image.createImage(article, imageUrl))
-            .forEach(imageJpaRepository::save);
+        List<String> imageUrls = new ArrayList<>();
+
+        log.info("이미지 파일 개수 size:{}", imageFiles.size());
+        log.info("이미지가 있는지 확인 {}", imageFiles.isEmpty());
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            for (MultipartFile file : imageFiles) {
+                if (file.isEmpty()) {
+                    break;
+                }
+                log.info("이미지 파일 이름:{}", file.getOriginalFilename());
+                try {
+                    String fileUrl = s3Service.uploadFile(file);
+                    imageUrls.add(fileUrl);
+                } catch (IOException e) {
+                    log.error("파일 업로드 중 오류 발생", e);
+                    throw new IllegalArgumentException("파일 업로드 중 오류 발생");
+                }
+            }
+
+            /**
+             * URL을 기반으로 이미지 엔티티를 생성하고 저장
+             */
+            imageUrls.stream()
+                .map(imageUrl -> Image.createImage(article, imageUrl))
+                .forEach(imageJpaRepository::save);
+        }
 
         return article.getId();
     }
+
 
     /**
      * 게시글 상세 조회
@@ -90,8 +122,8 @@ public class ArticleService {
      * @param articleId
      * @param articleUpdate
      */
-    public Long updateArticle(Long articleId, ArticleCreate articleUpdate, List<String> imageUrls,
-        Long userId) {
+    public Long updateArticle(Long articleId, ArticleCreate articleUpdate,
+        List<MultipartFile> imageFiles, Long userId) {
         Article article = articleJpaRepository.findById(articleId)
             .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 게시글이 없습니다."));
         User user = userJpaRepository.findById(userId).orElseThrow(() ->
@@ -100,8 +132,32 @@ public class ArticleService {
             throw new IllegalArgumentException("게시글 작성자만 수정 가능합니다.");
         }
 
+        /**
+         * 기존 이미지 삭제
+         */
         List<Image> images = imageJpaRepository.findByArticle(article);
         images.forEach(imageJpaRepository::delete);
+
+        /**
+         * 새 이미지 파일을 업로드하고 URL을 리스트로 생성
+         */
+        List<String> imageUrls = new ArrayList<>();
+        for (MultipartFile file : imageFiles) {
+            if (file.isEmpty()) {
+                break;
+            }
+            try {
+                String fileUrl = s3Service.uploadFile(file);
+                imageUrls.add(fileUrl);
+            } catch (IOException e) {
+                log.error("파일 업로드 중 오류 발생", e);
+                throw new IllegalArgumentException("파일 업로드 중 오류 발생");
+            }
+        }
+
+        /**
+         * 새 URL을 기반으로 이미지 엔티티를 생성하고 저장
+         */
         imageUrls.stream()
             .map(imageUrl -> Image.createImage(article, imageUrl))
             .forEach(imageJpaRepository::save);
@@ -109,6 +165,7 @@ public class ArticleService {
         article.updateArticle(articleUpdate);
         return article.getId();
     }
+
 
     /**
      * 게시글 삭제
