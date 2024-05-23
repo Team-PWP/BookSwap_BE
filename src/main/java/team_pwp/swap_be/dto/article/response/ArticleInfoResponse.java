@@ -17,10 +17,11 @@ public record ArticleInfoResponse(
     LocalDateTime createdAt,
     LocalDateTime bidStartAt,
     LocalDateTime bidEndAt,
-    List<String> imageUrls
+    List<String> imageUrls,
+    Long currentPrice
 ) {
 
-    public static ArticleInfoResponse from(Article article, List<Image> images) {
+    public static ArticleInfoResponse from(Article article, List<Image> images, Long currentPrice) {
         return ArticleInfoResponse.builder()
             .userId(article.getUser().getId())
             .title(article.getTitle())
@@ -31,6 +32,7 @@ public record ArticleInfoResponse(
             .bidStartAt(article.getBidStartAt())
             .bidEndAt(article.getBidEndAt())
             .imageUrls(images.stream().map(Image::getImageUrl).toList())
+            .currentPrice(currentPrice)
             .build();
     }
 
