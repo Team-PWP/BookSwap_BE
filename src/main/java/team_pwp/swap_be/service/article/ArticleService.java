@@ -22,6 +22,7 @@ import team_pwp.swap_be.entity.article.Article;
 import team_pwp.swap_be.entity.image.Image;
 import team_pwp.swap_be.entity.user.User;
 import team_pwp.swap_be.repository.article.ArticleJpaRepository;
+import team_pwp.swap_be.repository.bid.BidJpaRepository;
 import team_pwp.swap_be.repository.image.ImageJpaRepository;
 import team_pwp.swap_be.repository.user.UserJpaRepository;
 
@@ -36,6 +37,7 @@ public class ArticleService {
     private final ImageJpaRepository imageJpaRepository;
     private final AmazonS3 amazonS3;
     private final S3Service s3Service;
+    private final BidJpaRepository bidJpaRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -100,7 +102,9 @@ public class ArticleService {
         Article article = articleJpaRepository.findById(articleId)
             .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 게시글이 없습니다."));
         List<Image> images = imageJpaRepository.findByArticle(article);
-        return ArticleInfoResponse.from(article, images);
+
+        Long currentPrice = bidJpaRepository.findHighestBidPriceByArticleId(articleId);
+        return ArticleInfoResponse.from(article, images, currentPrice);
     }
 
     /**
