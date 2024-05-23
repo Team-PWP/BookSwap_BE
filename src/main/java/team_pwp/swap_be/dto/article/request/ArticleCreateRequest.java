@@ -27,7 +27,7 @@ public record ArticleCreateRequest(
      *
      * @return
      */
-    public boolean isBidStartAtValid() {
+    private boolean isBidStartAtValid() {
         return bidStartAt.isAfter(LocalDateTime.now());
     }
 
@@ -36,21 +36,21 @@ public record ArticleCreateRequest(
      *
      * @return
      */
-    public boolean isBidEndAtValid() {
+    private boolean isBidEndAtValid() {
         return bidEndAt.isAfter(bidStartAt.plusHours(1));
     }
 
     /**
      * minPrice는 0이상 입니다.
      */
-    public boolean isMinPriceValid() {
+    private boolean isMinPriceValid() {
         return minPrice >= 0;
     }
 
     /**
      * buyoutPrice는 minPrice보다 커야합니다.
      */
-    public boolean isBuyoutPriceValid() {
+    private boolean isBuyoutPriceValid() {
         return buyoutPrice > minPrice;
     }
 
