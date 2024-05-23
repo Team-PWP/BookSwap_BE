@@ -21,7 +21,7 @@ jwt:
   secret: ${SECRET}
 kakao:
   client-id: ${CLIENT_ID}
-  redirect-uri: http://localhost:5173/redirection
+  redirect-uri: http://swapfront.s3-website.ap-northeast-2.amazonaws.com/redirection
   token-uri: https://kauth.kakao.com/oauth/token
   user-info-uri: https://kapi.kakao.com/v2/user/me
 
