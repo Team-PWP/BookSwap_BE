@@ -42,10 +42,7 @@ import team_pwp.swap_be.service.article.ArticleService;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final AmazonS3 amazonS3;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
 
     @Operation(summary = "게시글 생성", description = "게시글 생성")
     @PostMapping
@@ -117,22 +114,4 @@ public class ArticleController {
         return articleService.searchArticlePaging(keyword, pagingRequest);
     }
 
-    @Operation(summary = "업로드 테스트", description = "업로드 테스트")
-    @PostMapping("/upload")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> uploadTest(@RequestParam("file") MultipartFile file) {
-        log.info("업로드 테스트");
-        try {
-            String fileName = file.getOriginalFilename();
-            String fileUrl = "https://" + bucket + "/test" + fileName;
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
-            amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
-            return ResponseEntity.ok(fileUrl);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 }
