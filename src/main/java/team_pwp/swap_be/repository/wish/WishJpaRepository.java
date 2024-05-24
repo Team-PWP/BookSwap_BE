@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import team_pwp.swap_be.domain.article.ArticleImage;
+import team_pwp.swap_be.domain.wish.WishArticleImage;
 import team_pwp.swap_be.entity.article.Article;
 import team_pwp.swap_be.entity.user.User;
 import team_pwp.swap_be.entity.wish.Wish;
@@ -16,8 +17,8 @@ public interface WishJpaRepository extends JpaRepository<Wish, Long> {
 
     boolean existsByArticleAndUser(Article article, User user);
 
-    @Query(" SELECT new team_pwp.swap_be.domain.article.ArticleImage(" +
-        "a.id,a.user, a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
+    @Query(" SELECT new team_pwp.swap_be.domain.wish.WishArticleImage(" +
+        "w.id,a.id,a.user, a.title, a.content, a.buyoutPrice, a.minPrice, a.createdAt, a.bidStartAt, a.bidEndAt, "
         +
         "GROUP_CONCAT(i.imageUrl)) " +
         "FROM Wish w " +
@@ -26,5 +27,5 @@ public interface WishJpaRepository extends JpaRepository<Wish, Long> {
         "WHERE w.user.id = :userId " +
         "GROUP BY a.id " +
         "ORDER BY a.createdAt DESC")
-    Page<ArticleImage> findAllByUserId(Long userId, Pageable pageable);
+    Page<WishArticleImage> findAllByUserId(Long userId, Pageable pageable);
 }
