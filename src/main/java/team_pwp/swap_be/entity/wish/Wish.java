@@ -34,4 +34,13 @@ public class Wish {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    private Wish(User user, Article article) {
+        this.user = user;
+        this.article = article;
+    }
+
+    public static Wish createWish(User user, Article article) {
+        return new Wish(user, article);
+    }
+
 }
