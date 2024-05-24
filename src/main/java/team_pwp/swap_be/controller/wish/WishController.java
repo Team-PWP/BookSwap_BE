@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team_pwp.swap_be.dto.article.response.ArticleResponse;
 import team_pwp.swap_be.dto.common.PagingRequest;
 import team_pwp.swap_be.dto.common.PagingResponse;
-import team_pwp.swap_be.entity.wish.Wish;
+import team_pwp.swap_be.dto.wish.response.WishResponse;
 import team_pwp.swap_be.service.wish.WishService;
 
 @Tag(name = "찜", description = "찜 API")
@@ -39,16 +38,19 @@ public class WishController {
 
     @Operation(summary = "찜 목록 조회", description = "찜 목록 조회")
     @GetMapping
-    public PagingResponse<ArticleResponse> getWishList(@Valid PagingRequest pagingRequest,
+    public PagingResponse<WishResponse> getWishList(@Valid PagingRequest pagingRequest,
         Principal principal) {
         log.info("찜 목록 조회");
         return wishService.getWishList(pagingRequest, Long.parseLong(principal.getName()));
+
     }
 
     @Operation(summary = "찜 취소 하기", description = "찜 취소 하기")
-    @DeleteMapping("/{articleId}")
-    public void deleteWish(@PathVariable Long articleId, Principal principal) {
+    @DeleteMapping("/{wishId}")
+    public ResponseEntity<String> deleteWish(@PathVariable Long wishId, Principal principal) {
         log.info("찜 취소 하기");
+        wishService.deleteWish(wishId, Long.parseLong(principal.getName()));
+        return ResponseEntity.ok("찜 취소 성공");
     }
 
 }
