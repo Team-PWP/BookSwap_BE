@@ -52,13 +52,6 @@ public class BidController {
         return ResponseEntity.status(HttpStatus.OK).body("입찰 취소 성공");
     }
 
-    @Operation(summary = "입찰한 게시글 조회", description = "입찰한 게시글 조회")
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public void getBids() {
-        log.info("입찰한 게시글 조회");
-    }
-
     @Operation(summary = "게시글 입찰 내역 페이징 조회", description = "게시글 입찰 내역 조회")
     @GetMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
