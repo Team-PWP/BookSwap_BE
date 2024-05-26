@@ -12,6 +12,11 @@ spring:
       hibernate:
         format_sql: true
       show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB # 파일의 용량 제한
+      max-request-size: 10MB # 전체 최대 크기 용량 제한
+      resolve-lazily: true
 logging:
   level:
     org.hibernate.SQL: DEBUG
@@ -37,3 +42,5 @@ cloud:
       auto: false
     stack:
       auto: false
+
+
