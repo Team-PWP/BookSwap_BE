@@ -3,6 +3,7 @@ package team_pwp.swap_be.dto.article.response;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
+import team_pwp.swap_be.domain.Bid.CurrentPriceUser;
 import team_pwp.swap_be.entity.article.Article;
 import team_pwp.swap_be.entity.image.Image;
 
@@ -18,10 +19,12 @@ public record ArticleInfoResponse(
     LocalDateTime bidStartAt,
     LocalDateTime bidEndAt,
     List<String> imageUrls,
-    Long currentPrice
+    Long currentPrice,
+    Long maxBidUserId
 ) {
 
-    public static ArticleInfoResponse from(Article article, List<Image> images, Long currentPrice) {
+    public static ArticleInfoResponse from(Article article, List<Image> images,
+        CurrentPriceUser currentPriceUser) {
         return ArticleInfoResponse.builder()
             .userId(article.getUser().getId())
             .title(article.getTitle())
@@ -32,7 +35,8 @@ public record ArticleInfoResponse(
             .bidStartAt(article.getBidStartAt())
             .bidEndAt(article.getBidEndAt())
             .imageUrls(images.stream().map(Image::getImageUrl).toList())
-            .currentPrice(currentPrice)
+            .currentPrice(currentPriceUser.getCurrentPrice())
+            .maxBidUserId(currentPriceUser.getUserId())
             .build();
     }
 
