@@ -12,6 +12,7 @@ import team_pwp.swap_be.entity.user.User;
 public class ArticleImage {
 
     private final Long id;
+    private final Long userId;
     private final String userNickname;
     private final String title;
     private final String content;
@@ -28,6 +29,7 @@ public class ArticleImage {
         LocalDateTime createdAt, LocalDateTime bidStartAt, LocalDateTime bidEndAt,
         Object imageUrls) {
         this.id = id;
+        this.userId = user.getId();
         this.userNickname = user.getNickname();
         this.title = title;
         this.content = content;
