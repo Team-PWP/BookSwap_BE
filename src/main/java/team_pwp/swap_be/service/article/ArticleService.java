@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import team_pwp.swap_be.domain.Bid.CurrentPriceUser;
 import team_pwp.swap_be.domain.article.ArticleCreate;
 import team_pwp.swap_be.domain.article.ArticleImage;
 import team_pwp.swap_be.dto.article.response.ArticleInfoResponse;
@@ -103,8 +104,9 @@ public class ArticleService {
             .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 게시글이 없습니다."));
         List<Image> images = imageJpaRepository.findByArticle(article);
 
-        Long currentPrice = bidJpaRepository.findHighestBidPriceByArticleId(articleId);
-        return ArticleInfoResponse.from(article, images, currentPrice);
+        CurrentPriceUser currentPriceUser = bidJpaRepository.findHighestBidUserByArticleId(
+            articleId);
+        return ArticleInfoResponse.from(article, images, currentPriceUser);
     }
 
     /**

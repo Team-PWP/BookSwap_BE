@@ -5,6 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ChatRoomCreate {
+public class EnterChatRoomResponseCreate {
 
+    Long chatRoomId;
+    Long articleId;
+    String title;
 }

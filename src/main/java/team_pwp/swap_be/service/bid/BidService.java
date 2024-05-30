@@ -49,6 +49,13 @@ public class BidService {
         }
 
         /**
+         * 입찰가격이 시작가격보다 낮은 경우
+         */
+        if (bidCreate.getPrice() < article.getMinPrice()) {
+            throw new IllegalArgumentException("시작가격보다 낮은 가격으로 입찰할 수 없습니다.");
+        }
+
+        /**
          * 입찰가격이 현재 최고가격보다 낮은 경우
          */
         Long currentPrice = bidJpaRepository.findHighestBidPriceByArticleId(

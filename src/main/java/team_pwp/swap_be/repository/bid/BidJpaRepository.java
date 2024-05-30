@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import team_pwp.swap_be.domain.Bid.CurrentPriceUser;
 import team_pwp.swap_be.entity.bid.Bid;
 
 @Repository
@@ -15,9 +16,15 @@ public interface BidJpaRepository extends JpaRepository<Bid, Long> {
     /**
      * ArticleId로 최고가격 조회
      */
-
     @Query("SELECT MAX(b.price) FROM Bid b WHERE b.article.id = :articleId")
     Long findHighestBidPriceByArticleId(@Param("articleId") Long articleId);
+
+
+    /**
+     * ArticleId로 최고가격 유저 조회
+     */
+    @Query("SELECT new team_pwp.swap_be.domain.Bid.CurrentPriceUser(MAX(b.price), b.user.id) FROM Bid b WHERE b.article.id = :articleId")
+    CurrentPriceUser findHighestBidUserByArticleId(@Param("articleId") Long articleId);
 
     void deleteByArticleIdAndUserId(Long articleId, long userId);
 

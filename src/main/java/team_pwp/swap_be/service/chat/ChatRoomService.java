@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team_pwp.swap_be.domain.chatroom.EnterChatRoomResponseCreate;
 import team_pwp.swap_be.dto.chat.request.ChatRoomCreateRequest;
 import team_pwp.swap_be.dto.chat.response.EnterChatRoomResponse;
 import team_pwp.swap_be.dto.common.PagingRequest;
@@ -67,8 +68,9 @@ public class ChatRoomService {
         Long userId) {
         User user = userJpaRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
-        Page<EnterChatRoom> enterChatRooms = enterChatRoomJpaRepository.findAllByUserId(
-            userId, pagingRequest.toPageable());
-        return PagingResponse.from(enterChatRooms, EnterChatRoomResponse::from);
+        Page<EnterChatRoomResponseCreate> enterChatRoomResponseCreates = chatRoomJpaRepository.findAllByUserId(
+            userId,
+            pagingRequest.toPageable());
+        return PagingResponse.from(enterChatRoomResponseCreates, EnterChatRoomResponse::from);
     }
 }
