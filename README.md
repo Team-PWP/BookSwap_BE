@@ -85,6 +85,16 @@
 - 설명: Spring Validation을 사용하여 입력 값의 유효성을 검사합니다.
 
 ### Spring Cloud AWS Starter
+- 의존성: implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+- 설명: AWS S3와 같은 AWS 서비스와의 통합을 지원하는 라이브러리입니다.
+
+## 실행방법
+
+1. 압축파일을 푼다.
+2. 터미널을 열고 프로젝트 폴더로 이동한다.
+3. `./gradlew build` 명령어로 빌드한다.
+4. `cd build/libs` 빌드된 파일이 있는 곳으로 이동한다.
+5. `java -jar Swap_BE-0.0.1-SNAPSHOT.jar` 명령어로 실행한다.
 
 - 의존성: implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 - 설명: AWS S3와 같은 AWS 서비스와의 통합을 지원하는 라이브러리입니다.
